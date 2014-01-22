@@ -53,6 +53,8 @@ class Server extends events.EventEmitter
       if 'keepalive' is message
         @connections[client] = @connections[client] || {}
         @connections[client].lastTime = (new Date()).getTime()
+      else
+        @.emit 'message', message, client
 
   _watch: ()->
     setInterval ()=>
