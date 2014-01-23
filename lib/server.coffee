@@ -56,6 +56,9 @@ class Server extends events.EventEmitter
       else
         @.emit 'message', message, client
 
+  get: (key)->
+    @connections && @connections[key] 
+  
   _watch: ()->
     setInterval ()=>
       for k, connection of @connections
