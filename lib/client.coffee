@@ -29,6 +29,7 @@ class Client extends events.EventEmitter
     @message = ''
     @client = net.connect @options, ()=>
       console.log "client has connected to #{@options.host}:#{@options.port}"
+      @.emit 'connection'
       @restartTime = @options.restartTime
       setInterval ()=>
         @send 'keepalive'
@@ -46,13 +47,11 @@ class Client extends events.EventEmitter
       , @restartTime
 
     @client.on 'error', (error)=>
-      console.log error, @options
       @client.destroy()
-      # @restartTime = @restartTime * 2
-      # console.log @restartTime
-      # setTimeout ()=>
-      #   @_init()
-      # , @restartTime
+      @restartTime = @restartTime * 2
+      setTimeout ()=>
+        @_init()
+      , @restartTime
 
     @client.on 'data', (data)=>
       @message += data
