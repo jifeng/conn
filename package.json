@@ -1,7 +1,7 @@
 {
   "name": "conn",
   "main": "index.js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "基于tcp的长连接通道",
   "author": {
     "name": "继风",
