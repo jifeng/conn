@@ -15,5 +15,5 @@ server.on 'data', (data)->
 setInterval ()->
   connections = server.connections
   for k, c of connections
-    c.send 'client hell world'
+    c.send 'client hello world'
 , 1000

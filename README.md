@@ -10,7 +10,7 @@ conn
 
 
 
-## 安装(暂未来发布)
+## 安装
 ```bash
 npm install conn
 ```
@@ -41,6 +41,6 @@ var client = conn.createClient({
   host: '127.0.0.1'
 });
 
-client.send('hello world');
+client.send('hello world');//发送消息
+client.close();//关闭
 ```
-
