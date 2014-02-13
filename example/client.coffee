@@ -13,3 +13,7 @@ setInterval ()->
 
 client.on 'data', (data)->
   console.log('client data', data);
+
+setTimeout ()->
+  client.close()
+, 2000

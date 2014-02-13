@@ -22,6 +22,7 @@ class Client extends events.EventEmitter
     }, @args
     @restartTime = @options.restartTime
     @_init()
+    @closeFlag = false
     @
 
   _init: ()->
@@ -31,7 +32,7 @@ class Client extends events.EventEmitter
       console.log "client has connected to #{@options.host}:#{@options.port}"
       @.emit 'connection'
       @restartTime = @options.restartTime
-      setInterval ()=>
+      @keepInterval = setInterval ()=>
         @send 'keepalive'
       , @options.routeInterval
     @_initEvent()
@@ -40,6 +41,7 @@ class Client extends events.EventEmitter
   _initEvent:()->
     @client.on 'end', ()=>
       console.log "client has disconnected to #{@options.host}:#{@options.port}"
+      return if @closeFlag is true
       time = @options.restartTime * @restartCount
       @restartTime = @restartTime * 2 <= 160000 ? @restartTime * 2: 160000
       setTimeout ()=>
@@ -47,7 +49,9 @@ class Client extends events.EventEmitter
       , @restartTime
 
     @client.on 'error', (error)=>
+      console.log "client connetion to #{@options.host}:#{@options.port} happen ERROR: #{error}"
       @client.destroy()
+      return if @closeFlag is true
       @restartTime = @restartTime * 2
       setTimeout ()=>
         @_init()
@@ -64,10 +68,13 @@ class Client extends events.EventEmitter
 
   send: (message)->
     mess = message + SPLITTAG
-    @client.write mess
+    @client.write mess if @closeFlag is false
   
   close: ()->
-
+    @closeFlag = true
+    clearInterval @keepInterval
+    @client.end()
+    # @client.destroy()
 
 module.exports = (args)->
   new Client args
