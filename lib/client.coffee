@@ -52,7 +52,7 @@ class Client extends events.EventEmitter
       console.log "client connetion to #{@options.host}:#{@options.port} happen ERROR: #{error}"
       @client.destroy()
       return if @closeFlag is true
-      @restartTime = @restartTime * 2
+      @restartTime = @restartTime * 2 <= 160000 ? @restartTime * 2: 160000
       setTimeout ()=>
         @_init()
       , @restartTime
